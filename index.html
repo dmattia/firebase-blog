@@ -28,6 +28,7 @@
         firebase.database().ref('blogs/').push({
           title: title,
           content: content,
+          time: new Date().getTime(),
         });
       }
 
@@ -35,6 +36,7 @@
         $('body').append(
           '<h2 class="blogTitle">' + values.title + '</h2>' +
           '<p class="blogContent">' + values.content + '</p>' + 
+          '<p class="blogContent">' + new Date(values.time) + '</p>' +
           '<hr>'
         );
       }
