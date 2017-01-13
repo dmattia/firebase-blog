@@ -13,8 +13,6 @@ exports.handler = (event, context, callback) => {
           "<url>http://i2.mirror.co.uk/incoming/article8075004.ece/ALTERNATES/s615b/Harambe.jpg</url>" +
           "<title>David Mattia Hackers Blog</title>" +
           "<link>https://d29c3fen6vwvzd.cloudfront.net/</link>" +
-          "<width>144</width>" +
-          "<height>144</height>" +
         "</image>" +
         "<description>Blog for CSE 4something with pbui</description>";
         
@@ -38,7 +36,7 @@ exports.handler = (event, context, callback) => {
             var xml_items = "";
             Object.keys(parsed).forEach(function(key) {
               var val = parsed[key];
-              xml_items += createItemXML(val.title, val.content, new Date(val.time));
+              xml_items += createItemXML(key, val.title, val.content, new Date(val.time));
             });
             
             var xml = xml_pre_items + xml_items + xml_post_items;
@@ -47,10 +45,10 @@ exports.handler = (event, context, callback) => {
     });
 };
 
-var createItemXML = function(title, content, dateString) {
+var createItemXML = function(id, title, content, dateString) {
     return "<item>" +
             "<title>" + title + "</title>" +
-            "<link>https://d29c3fen6vwvzd.cloudfront.net</link>" +
+            "<link>https://d29c3fen6vwvzd.cloudfront.net?blog_id=" + id + "</link>" +
             "<description>" + content + "</description>" +
             "<pubDate>" + dateString + "</pubDate>" +
         "</item>";

@@ -32,20 +32,33 @@
         });
       }
 
-      function addBlogPostToPage(values) {
+      function addBlogPostToPage(snapshot) {
+        var blog_id = snapshot.key;
+        var values = snapshot.val();
         $('body').append(
-          '<h2 class="blogTitle">' + values.title + '</h2>' +
+          '<hr>' +
+          '<a href="' + location.pathname + '?blog_id=' + blog_id + '">' +
+            '<h2 class="blogTitle">' + values.title + '</h2>' +
+          '</a>' +
           '<p class="blogContent">' + values.content + '</p>' + 
-          '<p class="blogContent">' + new Date(values.time) + '</p>' +
-          '<hr>'
+          '<p class="blogContent">' + new Date(values.time) + '</p>'
         );
       }
 
       // watch for new blogs
-      var ref = firebase.database().ref('blogs/');
-      ref.on('child_added', function(snapshot) {
-        addBlogPostToPage(snapshot.val());  
-      });
+      function subscribeToAllBlogs() {
+        var ref = firebase.database().ref('blogs/');
+        ref.on('child_added', function(snapshot) {
+          addBlogPostToPage(snapshot);  
+        });
+      }
+
+      function subscribeToBlog(blog_id) {
+        var ref = firebase.database().ref('blogs/').child(blog_id);
+        ref.on('value', function(snapshot) {
+          addBlogPostToPage(snapshot);  
+        });
+      }
 
       $("#addBlog").on('click', function(e) {
         var email = prompt("email");
@@ -60,6 +73,15 @@
           .catch(function(error) {
             alert(error.message);
           });
+      });
+
+      $(function() {
+        var blog_id = location.search.split('blog_id=')[1];
+        if (blog_id != undefined) {
+          subscribeToBlog(blog_id); 
+        } else {
+          subscribeToAllBlogs();
+        }
       });
     </script>
   </body>
