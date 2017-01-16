@@ -49,8 +49,7 @@ var createItemXML = function(id, title, content, dateString) {
     return "<item>" +
             "<title>" + title + "</title>" +
             "<link>https://d29c3fen6vwvzd.cloudfront.net?blog_id=" + id + "</link>" +
-            "<description>" + content + "</description>" +
+            "<description><![CDATA[ " + content + " ]]></description>" +
             "<pubDate>" + dateString + "</pubDate>" +
         "</item>";
 }
-
